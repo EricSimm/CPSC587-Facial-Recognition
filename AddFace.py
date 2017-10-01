@@ -7,8 +7,24 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import MainPage
+import AddFacialImages
 class Ui_addPersonPage(object):
+    #opens up the MainPage
+    def backToMainPage(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = MainPage.Ui_mainPage()
+        self.ui.setupUi(self.window)
+        self.window.show()
+    #opens up the add facial images page
+    def goToAddFaceImage(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = AddFacialImages.Ui_NewFacePicture()
+        self.ui.setupUi(self.window)
+        self.window.show()
+    #TODO: Check if name is valid and if is in database
+    def continueAddFaceImage(self):
+        self.goToAddFaceImage()
     def setupUi(self, addPersonPage):
         addPersonPage.setObjectName("addPersonPage")
         addPersonPage.resize(571, 460)
@@ -24,6 +40,9 @@ class Ui_addPersonPage(object):
         self.backBtn.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 170, 255);")
         self.backBtn.setObjectName("backBtn")
+        #go back to main menu when back button is clicked
+        self.backBtn.clicked.connect(self.backToMainPage)
+        self.continueBtn.clicked.connect(self.continueAddFaceImage)
         self.gridLayout.addWidget(self.backBtn, 8, 0, 1, 1)
         self.lineEdit_2 = QtWidgets.QLineEdit(addPersonPage)
         self.lineEdit_2.setStyleSheet("background-color: rgb(255, 255, 255);")

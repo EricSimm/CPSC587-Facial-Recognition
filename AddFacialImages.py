@@ -8,7 +8,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import AddFace
+
 class Ui_NewFacePicture(object):
+    def backToAddFace(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = AddFace.Ui_addPersonPage()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        
     def setupUi(self, NewFacePicture):
         NewFacePicture.setObjectName("NewFacePicture")
         NewFacePicture.resize(1042, 893)
@@ -32,6 +40,8 @@ class Ui_NewFacePicture(object):
         self.backBtn.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 170, 255);")
         self.backBtn.setObjectName("backBtn")
+        #go back to AddFace
+        self.backBtn.clicked.connect(self.backToAddFace)
         self.horizontalLayout_2.addWidget(self.backBtn)
         self.doneBtn = QtWidgets.QPushButton(NewFacePicture)
         self.doneBtn.setStyleSheet("color: rgb(255, 255, 255);\n"

@@ -7,8 +7,15 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import MainPage
+
 
 class Ui_camRecognitionPage(object):
+    def backToMainPage(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = MainPage.Ui_mainPage()
+        self.ui.setupUi(self.window)
+        self.window.show()
     def setupUi(self, camRecognitionPage):
         camRecognitionPage.setObjectName("camRecognitionPage")
         camRecognitionPage.resize(621, 456)
@@ -32,7 +39,9 @@ class Ui_camRecognitionPage(object):
 "background-color: rgb(0, 170, 255);")
         self.backBtn.setObjectName("backBtn")
         self.gridLayout.addWidget(self.backBtn, 1, 1, 1, 1)
-
+        #go back to main page
+        self.backBtn.clicked.connect(self.backToMainPage)
+        
         self.retranslateUi(camRecognitionPage)
         QtCore.QMetaObject.connectSlotsByName(camRecognitionPage)
 
