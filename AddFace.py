@@ -9,6 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
 import AddFacialImages
+#ToFix: lineEdit and LineEdit_2 are for First and Last Names, should be named
 class Ui_addPersonPage(object):
     #opens up the MainPage
     def backToMainPage(self):
@@ -22,9 +23,15 @@ class Ui_addPersonPage(object):
         self.ui = AddFacialImages.Ui_NewFacePicture()
         self.ui.setupUi(self.window)
         self.window.show()
-    #TODO: Check if name is valid and if is in database
+    #Check if name is valid
     def continueAddFaceImage(self):
-        self.goToAddFaceImage()
+        firstName = self.lineEdit.text()
+        lastName = self.lineEdit_2.text()
+        if not firstName or not lastName:
+            self.errorLbl.setText("<font color='red'>Please enter a full name</font>")
+        else:
+            self.goToAddFaceImage()
+            
     def setupUi(self, addPersonPage):
         addPersonPage.setObjectName("addPersonPage")
         addPersonPage.resize(571, 460)
