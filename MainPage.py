@@ -7,8 +7,22 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from CameraRecognition import Ui_camRecognitionPage
+from AddFace import Ui_addPersonPage
 
 class Ui_mainPage(object):
+    def openRecognition(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_camRecognitionPage()
+        self.ui.setupUi(self.window)
+        mainPage.hide()
+        self.window.show()
+    def openAddFace(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_addPersonPage()
+        self.ui.setupUi(self.window)
+        mainPage.hide()
+        self.window.show()
     def setupUi(self, mainPage):
         mainPage.setObjectName("mainPage")
         mainPage.resize(521, 351)
@@ -33,12 +47,14 @@ class Ui_mainPage(object):
         self.startRecBtn = QtWidgets.QPushButton(mainPage)
         self.startRecBtn.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 170, 255);")
+        self.startRecBtn.clicked.connect(self.openRecognition)     
         self.startRecBtn.setObjectName("startRecBtn")
         self.verticalLayout.addWidget(self.startRecBtn)
         self.addFaceBtn = QtWidgets.QPushButton(mainPage)
         self.addFaceBtn.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 170, 255);")
         self.addFaceBtn.setObjectName("addFaceBtn")
+        self.addFaceBtn.clicked.connect(self.openAddFace)
         self.verticalLayout.addWidget(self.addFaceBtn)
         self.gridLayout.addLayout(self.verticalLayout, 1, 2, 1, 1)
         self.aboutBtn = QtWidgets.QPushButton(mainPage)
