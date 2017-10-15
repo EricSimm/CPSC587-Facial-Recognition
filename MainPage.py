@@ -20,7 +20,7 @@ class Ui_mainPage(object):
         self.ui.setupUi(self.window)
         self.window.show()
         
-    def recognitionCam():
+    def recognitionCam(self):
         faceRecognition.faceRecognition()
         
         
