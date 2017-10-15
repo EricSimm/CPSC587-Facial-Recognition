@@ -140,4 +140,4 @@ def faceRecognition():
     video_capture.release()
     cv2.destroyAllWindows()
     
-faceRecognition()
+#faceRecognition()
