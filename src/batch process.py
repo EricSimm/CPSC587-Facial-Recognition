@@ -6,13 +6,14 @@ Created on Sat Sep 30 21:29:55 2017
 """
 
 
-from imutils.video import VideoStream
+#from imutils.video import VideoStream
 import numpy as np
+import cv2
 from imutils import face_utils
-import datetime
-import argparse
-import imutils
-import time
+#import datetime
+#import argparse
+#import imutils
+#import time
 import dlib
 import cv2
 import os
@@ -24,74 +25,84 @@ from collections import OrderedDict
 #ap.add_argument("-r", "--picamera", type=int, default=-1,
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
-motherfucker = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-
-print("[INFO] loading facial landmark predictor...")
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor(motherfucker)
-
-print("[INFO] camera sensor warming up...")
-#vs = VideoStream().start()
-#time.sleep(2.0)
-#times = 0
-#while True:
-	# grab the frame from the threaded video stream, resize it to
-	# have a maximum width of 400 pixels, and convert it to
-	# grayscale
-   # frame = vs.read()
-    #frame = imutils.resize(frame, width=1000)
-path = "E:\\Eric Face-20171004T173836Z-001\\Eric Face"
-s = os.listdir(path)
-
-count = 1
-for i in s:
+def addPhoto(path, fullname):
+    cwd = os.getcwd()
+    root = os.path.abspath(os.path.join(cwd, os.pardir))
+    model = os.path.join(root, "model")
+    face_detection_model = os.path.join(model,"shape_predictor_68_face_landmarks.dat")
+    #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
+    newface = "faces\\"+fullname
+    faces = os.path.join(root, newface)
+    os.mkdir(faces)
+    print("[INFO] loading facial landmark predictor...")
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor(face_detection_model)
     
-    document = os.path.join(path,i)
-    print(document)
-    img = cv2.imread(document)
-    #cv2.imshow("",img)
-    #img = cv2.resize(img, (300,300))
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    rects = detector(gray, 0)
-    for rect in rects:
-        shape = predictor(gray, rect)
-        shape = face_utils.shape_to_np(shape)
-        FACIAL_LANDMARKS_IDXS = OrderedDict([
-                    ("mouth", (48, 68)),
-                    ("right_eyebrow", (17, 22)),
-                    ("left_eyebrow", (22, 27)),
-                    ("right_eye", (36, 42)),
-                    ("left_eye", (42, 48)),
-                    ("nose", (27, 36)),
-                    ("jaw", (0, 17))
-            ])
-        start_point = shape[0]
-        start_x = start_point[0]
-        start_y = start_point[1]
-        end_x = start_point[0]
-        end_y = start_point[1]
-        for k, name in enumerate(FACIAL_LANDMARKS_IDXS.keys()):
-            (j, k) = FACIAL_LANDMARKS_IDXS[name]
-            pts = shape[j:k]
-            #print(pts)
-            
-            for l in range(1, len(pts)):
-                ptA = pts[l]
-                curr_x = ptA[0]
-                curr_y = ptA[1]
-                if curr_x > end_x:
-                    end_x = curr_x
-                if curr_x < start_x:
-                    start_x = curr_x
-                if curr_y > end_y:
-                    end_y = curr_y
-                if curr_y < start_y:
-                    start_y = curr_y
-        subimg = gray[start_y-5:end_y+5, start_x-5:end_x+5]
-        subimg = cv2.resize(subimg, (300,300))
-        print(count)
-        cv2.imwrite('E:\\Eric Face1\\Eric'+str(count)+'.png', subimg)
-        count += 1
+    print("[INFO] camera sensor warming up...")
+    #vs = VideoStream().start()
+    #time.sleep(2.0)
+    #times = 0
+    #while True:
+    	# grab the frame from the threaded video stream, resize it to
+    	# have a maximum width of 400 pixels, and convert it to
+    	# grayscale
+       # frame = vs.read()
+        #frame = imutils.resize(frame, width=1000)
+    s = os.listdir(path)
+    
+    count = 1
+    for i in s:
+        
+        document = os.path.join(path,i)
+        print(document)
+        img = cv2.imread(document)
+        #cv2.imshow("",img)
+        #img = cv2.resize(img, (300,300))
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        rects = detector(gray, 0)
+        for rect in rects:
+            shape = predictor(gray, rect)
+            shape = face_utils.shape_to_np(shape)
+            FACIAL_LANDMARKS_IDXS = OrderedDict([
+                        ("mouth", (48, 68)),
+                        ("right_eyebrow", (17, 22)),
+                        ("left_eyebrow", (22, 27)),
+                        ("right_eye", (36, 42)),
+                        ("left_eye", (42, 48)),
+                        ("nose", (27, 36)),
+                        ("jaw", (0, 17))
+                ])
+            start_point = shape[0]
+            start_x = start_point[0]
+            start_y = start_point[1]
+            end_x = start_point[0]
+            end_y = start_point[1]
+            for k, name in enumerate(FACIAL_LANDMARKS_IDXS.keys()):
+                (j, k) = FACIAL_LANDMARKS_IDXS[name]
+                pts = shape[j:k]
+                #print(pts)
+                
+                for l in range(1, len(pts)):
+                    ptA = pts[l]
+                    curr_x = ptA[0]
+                    curr_y = ptA[1]
+                    if curr_x > end_x:
+                        end_x = curr_x
+                    if curr_x < start_x:
+                        start_x = curr_x
+                    if curr_y > end_y:
+                        end_y = curr_y
+                    if curr_y < start_y:
+                        start_y = curr_y
+            subimg = gray[start_y-5:end_y+5, start_x-5:end_x+5]
+            subimg = cv2.resize(subimg, (300,300))
+            print(count)
+            root = os.path.abspath(os.path.join(cwd, os.pardir))
+            newface = "faces\\"+fullname
+            faces = os.path.join(root, newface)
+            print(faces)
+            cv2.imwrite(faces+"\\"+fullname+str(count)+'.png', subimg)
+            count += 1
             #cv2.rectangle(frame, (start_x-10, start_y-5), (end_x+10, end_y+5), (0, 255, 0), 2)
                 
 		# loop over the (x, y)-coordinates for the facial landmarks
@@ -181,3 +192,4 @@ for i in s:
 #cv2.destroyAllWindows()
 #vs.stop()
         """
+addPhoto("E:\\Tiffany Face",'TIFFLi1')
