@@ -9,28 +9,30 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
 import AddFacialImages
+#from CameraCapture import cameraCapture
 #ToFix: lineEdit and LineEdit_2 are for First and Last Names, should be named
 class Ui_addPersonPage(object):
     #opens up the MainPage
-    def backToMainPage(self):
+    def backToMainPage(self, addPersonPage):
         self.window = QtWidgets.QWidget()
         self.ui = MainPage.Ui_mainPage()
         self.ui.setupUi(self.window)
         self.window.show()
+        addPersonPage.close()
     #opens up the add facial images page
     def goToAddFaceImage(self):
         self.window = QtWidgets.QWidget()
         self.ui = AddFacialImages.Ui_NewFacePicture()
         self.ui.setupUi(self.window)
         self.window.show()
-    #Check if name is valid
+    #Check if name is valid, if it is add camera
     def continueAddFaceImage(self):
         firstName = self.lineEdit.text()
         lastName = self.lineEdit_2.text()
         if not firstName or not lastName:
             self.errorLbl.setText("<font color='red'>Please enter a full name</font>")
-        else:
-            self.goToAddFaceImage()
+        #else:
+            #cameraCapture(firstName + lastName)
             
     def setupUi(self, addPersonPage):
         addPersonPage.setObjectName("addPersonPage")
@@ -48,7 +50,7 @@ class Ui_addPersonPage(object):
 "background-color: rgb(0, 170, 255);")
         self.backBtn.setObjectName("backBtn")
         #go back to main menu when back button is clicked
-        self.backBtn.clicked.connect(self.backToMainPage)
+        self.backBtn.clicked.connect(lambda: self.backToMainPage(addPersonPage))
         self.continueBtn.clicked.connect(self.continueAddFaceImage)
         self.gridLayout.addWidget(self.backBtn, 8, 0, 1, 1)
         self.lineEdit_2 = QtWidgets.QLineEdit(addPersonPage)
