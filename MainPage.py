@@ -9,7 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import CameraRecognition
 import AddFace
-
+import faceRecognition
 
 class Ui_mainPage(object):
     
@@ -19,6 +19,10 @@ class Ui_mainPage(object):
         self.ui = CameraRecognition.Ui_camRecognitionPage()
         self.ui.setupUi(self.window)
         self.window.show()
+        
+    def recognitionCam():
+        faceRecognition.faceRecognition()
+        
         
     #go to AddFace page
     def toAddFace(self, mainPage):
@@ -59,7 +63,7 @@ class Ui_mainPage(object):
 "background-color: rgb(0, 170, 255);")
         self.addFaceBtn.setObjectName("addFaceBtn")
         #go to other pages
-        self.startRecBtn.clicked.connect(self.toRecognition)  
+        self.startRecBtn.clicked.connect(self.recognitionCam)  
         self.addFaceBtn.clicked.connect(lambda: self.toAddFace(mainPage))
         
         self.verticalLayout.addWidget(self.addFaceBtn)

@@ -9,6 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
 import AddFacialImages
+import exaction
 #from CameraCapture import cameraCapture
 #ToFix: lineEdit and LineEdit_2 are for First and Last Names, should be named
 class Ui_addPersonPage(object):
@@ -31,8 +32,8 @@ class Ui_addPersonPage(object):
         lastName = self.lineEdit_2.text()
         if not firstName or not lastName:
             self.errorLbl.setText("<font color='red'>Please enter a full name</font>")
-        #else:
-            #cameraCapture(firstName + lastName)
+        else:
+            exaction.webcamScreenshot(firstName + lastName)
             
     def setupUi(self, addPersonPage):
         addPersonPage.setObjectName("addPersonPage")
