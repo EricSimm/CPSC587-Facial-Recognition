@@ -151,4 +151,4 @@ def webcamScreenshot(fullname):
     cv2.destroyAllWindows()
     vs.release()
     
-webcamScreenshot("ChrisLee")
+#webcamScreenshot("ChrisLee")
