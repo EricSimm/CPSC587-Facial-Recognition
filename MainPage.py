@@ -10,9 +10,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import CameraRecognition
 import AddFace
 import faceRecognition
+import os
+
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+            if name in files:
+                return os.path.join(root, name)
 
 class Ui_mainPage(object):
     
+
     #go to facial recognition page
     def toRecognition(self):
         self.window = QtWidgets.QWidget()
