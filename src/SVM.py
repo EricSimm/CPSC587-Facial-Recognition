@@ -10,13 +10,11 @@ from sklearn import preprocessing, cross_validation, neighbors, svm
 import pandas as pd
 from sklearn.externals import joblib
 import os
+import pathAttributes
 
 def SVM():
-    cwd = os.getcwd()
-    root = os.path.join(cwd, os.pardir)
-    model = os.path.join(root, "model")
-    data = os.path.join(root, "data")
-    df = pd.read_csv(data+'\\test.csv',header=None)
+    
+    df = pd.read_csv(pathAttributes.face_features_data, header=None)
     df.replace('?',-99999, inplace=True)
     X = np.array(df[df.columns[1:129]])
     X.reshape(-1,1)
@@ -31,6 +29,6 @@ def SVM():
     confidence = clt.score(X_test, y_test)
     print(confidence)
     if confidence>0.97:
-        joblib.dump(clt, model+'\\SVMModel1.pkl') 
+        joblib.dump(clt, pathAttributes.SVM_model) 
         
-SVM()
+#SVM()

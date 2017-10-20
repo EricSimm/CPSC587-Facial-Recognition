@@ -10,26 +10,22 @@ import cv2
 import numpy as np
 from sklearn.externals import joblib
 import os
-import MainPage
+import pathAttributes
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-p", "--shape-predictor", metavar="D:\\用户目录\\下载\\shape_predictor_68_face_landmarks.dat\\shape_predictor_68_face_landmarks.dat", required=True,
 #	help="path to facial landmark predictor")
 #ap.add_argument("-r", "--picamera", type=int, default=-1,
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
-
 def faceRecognition():
     
-    cwd = os.getcwd()
-    root = os.path.abspath(os.path.join(cwd, os.pardir))
-    model = os.path.join(root, "model")
-    face_detection_model = os.path.join(model,"shape_predictor_68_face_landmarks.dat")
+
     #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    face_recognition_model= os.path.join(model,"dlib_face_recognition_resnet_model_v1 (1).dat")
+    
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(face_detection_model)
-    face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
+    predictor = dlib.shape_predictor(pathAttributes.face_detection_model)
+    face_encoder = dlib.face_recognition_model_v1(pathAttributes.face_recognition_model)
     
     print("[INFO] camera sensor warming up...")
     #vs = VideoStream().start()
@@ -112,7 +108,8 @@ def faceRecognition():
             else:
                 name = "Unknown"
                 """
-            clf = joblib.load(MainPage.find('SVMModel.pkl',model))
+            
+            clf = joblib.load(pathAttributes.SVM_model)
             feeaturesArray = np.array(face_encoding)
             name = clf.predict(feeaturesArray.reshape(1,-1))[0]
             
