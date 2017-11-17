@@ -24,6 +24,7 @@ import cv2
 import os
 from collections import OrderedDict
 from timeit import default_timer
+import MainPage
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-p", "--shape-predictor", metavar="D:\\用户目录\\下载\\shape_predictor_68_face_landmarks.dat\\shape_predictor_68_face_landmarks.dat", required=True,
 #	help="path to facial landmark predictor")
@@ -35,17 +36,28 @@ def webcamScreenshot(fullname):
     root = os.path.abspath(os.path.join(cwd, os.pardir))
     print(root)
     model = os.path.join(root, "model")
-    face_detection_model = model+"\\shape_predictor_68_face_landmarks.dat"
-    #motherfucker = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    #face_detection_model1 = "D:\\用户目录\\下载\\CPSC587-Facial-Recognition-master\\CPSC587-Facial-Recognition-master\\model\\shape_predictor_68_face_landmarks.dat"
+    face_detection_model = MainPage.find("shape_predictor_68_face_landmarks.dat", model)
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(face_detection_model)
     
     print("[INFO] camera sensor warming up...")
     
-    
+    #create new directory to save new pictures if it does not exist and save pictures
+    root = os.path.join(cwd, os.pardir)
+    newface = os.path.join("faces", fullname)
+    path = os.path.join(root, newface)
+    f = open('id.txt','r+')
+    _id = f.read()
+    path = path + '_' + _id
+    _id = str(int(_id) + 1)
+    f.seek(0)
+    f.write(_id)
+    f.truncate()
+    f.close()
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
     vs = cv2.VideoCapture(0)
     #time.sleep(2.0)
     times = 0
@@ -141,10 +153,10 @@ def webcamScreenshot(fullname):
                 #(_, thresh) = cv2.threshold(canny, 90, 255, cv2.THRESH_BINARY)
             subimg = gray[start_y-5:end_y+5, start_x-5:end_x+5]
             subimg = cv2.resize(subimg, (300,300))
-            root = os.path.join(cwd, os.pardir)
-            newface = "faces\\"+fullname
-            faces = os.path.join(root, newface)
-            cv2.imwrite(faces+"\\"+fullname+str(times)+'.png', subimg)
+            
+
+            cv2.imwrite(os.path.join(path,fullname+str(times)+'.png'), subimg)
+            #####
                     #cv2.imshow(name, subimg)
                     
             #break
