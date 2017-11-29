@@ -2,7 +2,8 @@
 """
 Created on Sat Sep 30 21:29:55 2017
 
-@author: Administrator
+@author: Zenan Li
+creates gray scale pictures
 """
 
 
