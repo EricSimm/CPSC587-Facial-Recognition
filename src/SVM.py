@@ -3,6 +3,7 @@
 Created on Wed Oct  4 12:37:39 2017
 
 @author: Administrator
+#create model using a SVM
 """
 
 import numpy as np
