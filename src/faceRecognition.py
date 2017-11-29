@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+## -*- coding: utf-8 -*-
 """
 Created on Tue Sep 26 13:38:17 2017
 
@@ -10,26 +10,30 @@ import cv2
 import numpy as np
 from sklearn.externals import joblib
 import os
-import MainPage
+import pathAttributes
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-p", "--shape-predictor", metavar="D:\\用户目录\\下载\\shape_predictor_68_face_landmarks.dat\\shape_predictor_68_face_landmarks.dat", required=True,
 #	help="path to facial landmark predictor")
 #ap.add_argument("-r", "--picamera", type=int, default=-1,
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
-
 def faceRecognition():
     
-    cwd = os.getcwd()
-    root = os.path.abspath(os.path.join(cwd, os.pardir))
-    model = os.path.join(root, "model")
-    face_detection_model = os.path.join(model,"shape_predictor_68_face_landmarks.dat")
+    f = open(pathAttributes.dictionary, 'r')                  
+    result = {}
+    for line in f.readlines():
+        line = line.strip()
+        print(line)
+        if not len(line):
+            continue
+        result[line.split(':')[0]] = line.split(':')[1]
+    f.close()
     #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    face_recognition_model= os.path.join(model,"dlib_face_recognition_resnet_model_v1 (1).dat")
+    #print(result)
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(face_detection_model)
-    face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
+    predictor = dlib.shape_predictor(pathAttributes.face_detection_model)
+    face_encoder = dlib.face_recognition_model_v1(pathAttributes.face_recognition_model)
     
     print("[INFO] camera sensor warming up...")
     #vs = VideoStream().start()
@@ -112,10 +116,36 @@ def faceRecognition():
             else:
                 name = "Unknown"
                 """
-            clf = joblib.load(MainPage.find('SVMModel.pkl',model))
+            threshold = 0.4 #-0.1 for C=0.1 4-8 6 for 0.3 
+            proba = 0.7
+            clf = joblib.load(pathAttributes.SVM_model)
             feeaturesArray = np.array(face_encoding)
-            name = clf.predict(feeaturesArray.reshape(1,-1))[0]
-            
+            ID = clf.predict(feeaturesArray.reshape(1,-1))[0]
+            name = result[str(ID)]
+            scores = clf.decision_function(feeaturesArray.reshape(1,-1))
+            #scores = clf.predict_proba(feeaturesArray.reshape(1,-1))
+            """
+            scores_sorted = np.sort(scores)
+            second_biggest = scores_sorted[0][-2]
+            minimum = scores_sorted[0][0]
+            biggest_score = np.max(scores)
+            gap = biggest_score - minimum
+            gap_2 = biggest_score - second_biggest
+            print(gap_2)
+            percentage = gap_2/gap *100
+            print(percentage)
+            if percentage < 30:
+                name = "unknown"
+                """
+            biggest_score = np.max(scores)
+            if biggest_score < threshold:
+                name = "unknown"
+            #biggest_score = np.max(scores)
+            #if biggest_score < proba:
+            #    name="unknown"
+            #scores = scores - np.min(scores)
+            #scores = scores/np.max(scores)
+            print(scores,name)
             face_names.append(name)
             #print(face_names)
         for (top, right, bottom, left), name in zip(raw_list, face_names):
@@ -125,13 +155,13 @@ def faceRecognition():
                 bottom *= 5
                 left *= 5
         
-                # Draw a box around the face
+                # Draw a box around the faceq
                 cv2.rectangle(frame, (left-10, top-10), (right+10, bottom+10), (0, 0, 255), 2)
         
                 # Draw a label with a name below the face
                 cv2.rectangle(frame, (left-10, bottom+10), (right+10, bottom+45), (0, 0, 255), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left, bottom + 33), font, 1.0, (255, 255, 255), 1)
+                cv2.putText(frame, name, (left, bottom + 30), font, 1.0, (255, 255, 255), 1)
         
         cv2.imshow('Video', frame)    #display the camra
     

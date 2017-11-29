@@ -11,6 +11,7 @@ import CameraRecognition
 import AddFace
 import faceRecognition
 import os
+import AboutPage
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
@@ -19,9 +20,15 @@ def find(name, path):
 
 class Ui_mainPage(object):
     
-
+    def toAboutPage(self, mainPage):
+        self.window = QtWidgets.QWidget()
+        self.ui = AboutPage.Ui_aboutPage()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        mainPage.close()
+    
     #go to facial recognition page
-    def toRecognition(self):
+    def toRecognition(self, mainPage):
         self.window = QtWidgets.QWidget()
         self.ui = CameraRecognition.Ui_camRecognitionPage()
         self.ui.setupUi(self.window)
@@ -79,6 +86,7 @@ class Ui_mainPage(object):
         self.aboutBtn.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 170, 255);")
         self.aboutBtn.setObjectName("aboutBtn")
+        self.aboutBtn.clicked.connect(lambda: self.toAboutPage(mainPage))
         self.gridLayout.addWidget(self.aboutBtn, 2, 3, 1, 1)
         self.label_2 = QtWidgets.QLabel(mainPage)
         self.label_2.setObjectName("label_2")
@@ -96,7 +104,7 @@ class Ui_mainPage(object):
         self.label.setText(_translate("mainPage", "<html><head/><body><p><span style=\" font-size:48pt; color:#ffffff;\">Smile</span></p></body></html>"))
         self.startRecBtn.setText(_translate("mainPage", "Start Recognition"))
         self.addFaceBtn.setText(_translate("mainPage", "Add Face"))
-        self.aboutBtn.setText(_translate("mainPage", "About"))
+        self.aboutBtn.setText(_translate("mainPage", "Instructions"))
         self.label_2.setText(_translate("mainPage", "<html><head/><body><p><br/></p></body></html>"))
         self.label_3.setText(_translate("mainPage", "<html><head/><body><p><br/></p></body></html>"))
 

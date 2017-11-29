@@ -13,12 +13,12 @@ from imutils import face_utils
 #import datetime
 #import argparse
 #import imutils
-#import time
+import time
 import dlib
 import cv2
 import os
 from collections import OrderedDict
-
+import pathAttributes
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-p", "--shape-predictor", metavar="D:\\用户目录\\下载\\shape_predictor_68_face_landmarks.dat\\shape_predictor_68_face_landmarks.dat", required=True,
 #	help="path to facial landmark predictor")
@@ -26,17 +26,16 @@ from collections import OrderedDict
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
 def addPhoto(path, fullname):
-    cwd = os.getcwd()
-    root = os.path.abspath(os.path.join(cwd, os.pardir))
-    model = os.path.join(root, "model")
-    face_detection_model = os.path.join(model,"shape_predictor_68_face_landmarks.dat")
+    
     #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    newface = "faces\\"+fullname
-    faces = os.path.join(root, newface)
-    os.mkdir(faces)
+    """
+    newface = os.path.join(pathAttributes.faces, fullname)
+    if not os.path.exists(newface):
+        os.makedirs(newface)
+        """
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(face_detection_model)
+    predictor = dlib.shape_predictor(pathAttributes.face_detection_model)
     
     print("[INFO] camera sensor warming up...")
     #vs = VideoStream().start()
@@ -49,7 +48,7 @@ def addPhoto(path, fullname):
        # frame = vs.read()
         #frame = imutils.resize(frame, width=1000)
     s = os.listdir(path)
-    
+    timestamp = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
     count = 1
     for i in s:
         
@@ -95,13 +94,19 @@ def addPhoto(path, fullname):
                     if curr_y < start_y:
                         start_y = curr_y
             subimg = gray[start_y-5:end_y+5, start_x-5:end_x+5]
-            subimg = cv2.resize(subimg, (300,300))
+#            subimg = cv2.resize(subimg, (300,300))
+            
+            timestamp_fullname = timestamp + "_" + fullname
+            newface = os.path.join(pathAttributes.faces, timestamp_fullname)
+            if not os.path.exists(newface):
+                os.makedirs(newface)
+                f = open(pathAttributes.dictionary, 'a')
+                f.write(timestamp + ":" + fullname + "\n")
+                f.close()
             print(count)
-            root = os.path.abspath(os.path.join(cwd, os.pardir))
-            newface = "faces\\"+fullname
-            faces = os.path.join(root, newface)
-            print(faces)
-            cv2.imwrite(faces+"\\"+fullname+str(count)+'.png', subimg)
+            
+            pic_path = os.path.join(newface, fullname+str(count)+'.png')
+            cv2.imwrite(pic_path, subimg)
             count += 1
             #cv2.rectangle(frame, (start_x-10, start_y-5), (end_x+10, end_y+5), (0, 255, 0), 2)
                 
@@ -192,4 +197,4 @@ def addPhoto(path, fullname):
 #cv2.destroyAllWindows()
 #vs.stop()
         """
-addPhoto("E:\\Tiffany Face",'TIFFLi1')
+#addPhoto("E:\\newfaces\\tiff",'Tiffany Lin')

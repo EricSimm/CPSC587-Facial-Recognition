@@ -11,6 +11,10 @@ import numpy as np
 from sklearn import preprocessing, cross_validation, neighbors, svm
 import os
 import csv
+import pathAttributes
+import shutil as su
+import time
+import glob
 #ap = argparse.ArgumentParser()
 #ap.add_argument("-p", "--shape-predictor", metavar="D:\\用户目录\\下载\\shape_predictor_68_face_landmarks.dat\\shape_predictor_68_face_landmarks.dat", required=True,
 #	help="path to facial landmark predictor")
@@ -18,37 +22,40 @@ import csv
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
 def dataGeneration():
-    cwd = os.getcwd()
-    root = os.path.abspath(os.path.join(cwd, os.pardir))
-    model = os.path.join(root, "model")
-    data = os.path.join(root, "data")
-    face_detection_model = os.path.join(model,"shape_predictor_68_face_landmarks.dat")
-    #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    face_recognition_model= os.path.join(model,"dlib_face_recognition_resnet_model_v1 (1).dat")
+    
+
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(face_detection_model)
-    face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
+    predictor = dlib.shape_predictor(pathAttributes.face_detection_model)
+    face_encoder = dlib.face_recognition_model_v1(pathAttributes.face_recognition_model)
     
     print("[INFO] camera sensor warming up...")
     #vs = VideoStream().start()
     #video_capture = cv2.VideoCapture(0)
     #time.sleep(2.0)
-    root = os.path.join(cwd, os.pardir)
-    newface = "faces"
-    faces = os.path.join(root, newface)
     names = []
-    s = os.listdir(faces)
-    for i in s:
-        names.append(os.path.basename(i))
-    people = []
+    s = os.listdir(pathAttributes.faces)
     
-    count = 1
     for i in s:
-        for name in names:
-            if str(i).find(name)>-1:
-                document = os.path.join(faces,i)
-                pics = os.listdir(document)
+        name_w_time = os.path.basename(i)
+        name_only = name_w_time.split("_",1)
+        names.append(name_only)
+    people = []
+    IDs = []
+    for i in s:
+        name_w_time = os.path.basename(i)
+        time_only = name_w_time.split("_",1)[0]
+        IDs.append(time_only)
+    #count = 1
+    
+    for i in s:
+        for ID in IDs:
+            if str(i).find(ID)>-1:
+                document = os.path.join(pathAttributes.faces,i)
+                #name_w_time = os.path.basename(document)
+                #name_only = name_w_time.split("_",1)
+                file_path_data = os.path.join(document, "*.png")
+                pics = glob.glob(file_path_data)
                 for index in pics:
                     pic = os.path.join(document,index)
                     print(pic)
@@ -58,15 +65,27 @@ def dataGeneration():
                         shape = predictor(image, faceDetect[0])
                         face_encoding = face_encoder.compute_face_descriptor(image, shape, 1)
                         features = list(face_encoding)
-                        features.insert(0,name)
+                        features.insert(0,ID)
+                        #features.insert(1,name_only)
                         people.append(features)
                         print(features)
                     except:
                         pass
-    csvfile = open(data+"\\data1.csv","w",newline='')
+    #online mode
+    newest_data_name = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))+".csv"
+    newest_data = os.path.join(pathAttributes.data, newest_data_name)
+    csvfile = open(newest_data,"w",newline='')
+    #csvfile = open(pathAttributes.face_features_data,"w",newline='')  batch mode
     writer = csv.writer(csvfile)
     writer.writerows(people)
     csvfile.close()
+    return False
+    #online mode
+    """
+    for i in s:
+        used_face = os.path.join(pathAttributes.faces, i)
+        su.move(used_face,pathAttributes.backup)
+"""        
 """measurement = open("E:\\data.txt", 'w')
 for person in people:
     measurement.writelines(str(person)+'\n')
@@ -89,4 +108,5 @@ chris_shape = predictor(chris_image, chris[0])
 chris_face_encoding = face_encoder.compute_face_descriptor(chris_image, chris_shape, 1)
 print("chrisli:"+str(chris_face_encoding))
 """
-dataGeneration()
+
+#dataGeneration()
