@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'AddFace.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
-#
-# WARNING! All changes made in this file will be lost!
+# Form to add new face, requires first and last name
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
@@ -29,7 +26,7 @@ class Ui_addPersonPage(object):
         self.ui = AddFacialImages.Ui_NewFacePicture()
         self.ui.setupUi(self.window)
         self.window.show()
-    #Check if name is valid, if it is add camera
+    #Check if name is valid, if it retrain model to accomidate new face
     def continueAddFaceImage(self):
         firstName = self.lineEdit.text()
         lastName = self.lineEdit_2.text()
