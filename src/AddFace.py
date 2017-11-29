@@ -2,6 +2,8 @@
 #
 # Created by: PyQt5 UI code generator 5.6
 # Form to add new face, requires first and last name
+# Created by: Eric Simmons
+# Edited by: Tiffany Lin
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
