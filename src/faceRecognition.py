@@ -2,7 +2,9 @@
 """
 Created on Tue Sep 26 13:38:17 2017
 
-@author: Administrator
+@author: Zenan Li
+Edited by: Tiffany Lin and Eric Simmons
+Used to recognize faces
 """
 
 import dlib
