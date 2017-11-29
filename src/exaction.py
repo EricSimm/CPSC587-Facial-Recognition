@@ -1,22 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 19 19:18:37 2017
-
-@author: Administrator
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Sep 30 13:26:24 2017
-
-@author: Administrator
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 26 13:38:17 2017
-
-@author: Administrator
+extracts faces from camera
+created by: Zenan Li
+edited by: Eric Simmons
 """
 
 #from imutils.video import VideoStream
@@ -39,10 +25,6 @@ import pathAttributes
 	#help="whether or not the Raspberry Pi camera should be used")
 #args = vars(ap.parse_args())
 def webcamScreenshot(fullname):
-
-    #motherfucker = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    #face_detection_model = "C:\\Users\\Administrator\\shape_predictor_68_face_landmarks.dat"
-    #face_detection_model1 = "D:\\用户目录\\下载\\CPSC587-Facial-Recognition-master\\CPSC587-Facial-Recognition-master\\model\\shape_predictor_68_face_landmarks.dat"
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(pathAttributes.face_detection_model)
@@ -171,4 +153,3 @@ def webcamScreenshot(fullname):
     cv2.destroyAllWindows()
     video_capture.release()
     return False
-#webcamScreenshot("julie zhu")
