@@ -3,7 +3,9 @@
 Created on Wed Oct  4 12:37:39 2017
 
 @author: Administrator
-#create model using a SVM
+create model using a SVM
+Created by: Zenan Li
+Edited by: Tiffany Lin and Eric SImmons
 """
 
 import numpy as np
