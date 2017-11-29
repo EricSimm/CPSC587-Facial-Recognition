@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct  3 18:22:42 2017
-
-@author: Administrator
+Created By: Zenan Li
+generates features from pictures
 """
 
 import dlib
