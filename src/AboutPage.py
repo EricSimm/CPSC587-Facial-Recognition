@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'aboutPage.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
-# WARNING! All changes made in this file will be lost!
+# Page tells about the project and gives instructions how to use it
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MainPage
 
 class Ui_aboutPage(object):
+    #goes back to main page
     def backToMainPage(self, aboutPage):
         self.window = QtWidgets.QWidget()
         self.ui = MainPage.Ui_mainPage()
