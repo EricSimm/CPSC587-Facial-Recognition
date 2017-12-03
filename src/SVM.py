@@ -3,9 +3,6 @@
 Created on Wed Oct  4 12:37:39 2017
 
 @author: Administrator
-create model using a SVM
-Created by: Zenan Li
-Edited by: Tiffany Lin and Eric SImmons
 """
 
 import numpy as np
@@ -95,5 +92,5 @@ def SVM():
     
     if clt.score(X_test,y_test)>0.96:
         joblib.dump(clt, pathAttributes.SVM_model) 
-             
+    return False
 #SVM()
